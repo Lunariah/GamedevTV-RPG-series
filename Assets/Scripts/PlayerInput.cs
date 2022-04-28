@@ -44,12 +44,13 @@ public class PlayerInput : MonoBehaviour
         
         if (hasHit)
         {
-            movement.MoveTo(hit.point);
             Target target = hit.collider.GetComponent<Target>();
             if (target != null)
             {
                 fighter.Attack(target);
+                return;
             }
+            movement.MoveTo(hit.point);
         }
     }
 }
