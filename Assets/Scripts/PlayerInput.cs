@@ -5,6 +5,7 @@ using RPG.Combat;
 
 [RequireComponent(typeof(Movement))]
 [RequireComponent(typeof(Fighter))]
+[SelectionBase]
 public class PlayerInput : MonoBehaviour
 {
     private Movement movement; 
@@ -44,13 +45,16 @@ public class PlayerInput : MonoBehaviour
         
         if (hasHit)
         {
-            Target target = hit.collider.GetComponent<Target>();
-            if (target != null)
+            Target validTarget = hit.collider.GetComponent<Target>();
+            if (validTarget != null)
             {
-                fighter.Attack(target);
-                return;
+                fighter.Attack(validTarget);
             }
-            movement.MoveTo(hit.point);
+            else
+            {
+                fighter.CancelAttacking();
+                movement.MoveTo(hit.point);
+            }
         }
     }
 }

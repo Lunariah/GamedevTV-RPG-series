@@ -28,7 +28,7 @@ public class Movement : MonoBehaviour
 
     public void GetInRangeFrom(Vector3 destination, float range, out bool alreadyInRange)
     {
-        if ((destination - transform.position).magnitude < range)
+        if ((destination - transform.position).magnitude < range + 0.1f) // 0.1 margin to dodge NavMeshAgent’s lack of precision
         {
             alreadyInRange = true;
             navMeshAgent.isStopped = true;
@@ -38,7 +38,7 @@ public class Movement : MonoBehaviour
             alreadyInRange = false;
             MoveTo(destination + (transform.position - destination).normalized * range);
         }
-
+        Debug.Log(alreadyInRange);
     }
     public void GetInRangeFrom(Vector3 destination, float range)
     {
