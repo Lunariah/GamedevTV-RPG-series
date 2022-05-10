@@ -10,6 +10,7 @@ namespace RPG.Combat
     {
         [SerializeField] float attackRange = 1;
         [SerializeField] float attackDelay = 0.8f;
+        [SerializeField] float attackPower = 1f;
         float remainingDelay = 0;
         Movement movement;
         Animator animator;
@@ -52,7 +53,14 @@ namespace RPG.Combat
 
         void Hit() // Animation event
         {
-            Debug.Log("Take that!");
+            if (target == null)
+                return;
+
+            Health targetHealth = target.GetComponent<Health>();
+            if (targetHealth != null)
+            {
+                targetHealth.TakeDamage(attackPower);
+            }
         }
     }
 }
