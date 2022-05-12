@@ -33,28 +33,33 @@ public class PlayerInput : MonoBehaviour
     {
         if (Input.GetMouseButton(0))
         {
-            MoveToCursor();
+            RaycastClick();
         }
     }
 
-    void MoveToCursor()
+    void RaycastClick()
     {
-        Ray movementRay = camera.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hit;
-        bool hasHit = Physics.Raycast(movementRay, out hit); // Switch to RaycastAll later
-        
-        if (hasHit)
+        Ray ray = camera.ScreenPointToRay(Input.mousePosition);
+        RaycastHit[] interactableHits = Physics.RaycastAll(ray, Mathf.Infinity, LayerMask.GetMask("Interactable"));
+
+        foreach (RaycastHit hit in interactableHits)
         {
-            Target validTarget = hit.collider.GetComponent<Target>();
-            if (validTarget != null)
+            Health validTarget = hit.collider.GetComponent<Health>();
+
+            // If a valid target is hit
+            if (validTarget != null && !validTarget.IsDead)
             {
                 fighter.Attack(validTarget);
-            }
-            else
-            {
-                fighter.CancelAttacking();
-                movement.MoveTo(hit.point);
-            }
+                return;
+            } 
+        }
+
+        // If no interactable is found, process movement
+        RaycastHit walkableHit; 
+        if (Physics.Raycast(ray, out walkableHit, LayerMask.GetMask("Walkable")))
+        {
+            fighter.CancelAttacking();
+            movement.MoveTo(walkableHit.point);
         }
     }
 }

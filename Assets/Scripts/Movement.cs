@@ -38,11 +38,20 @@ public class Movement : MonoBehaviour
             alreadyInRange = false;
             MoveTo(destination + (transform.position - destination).normalized * range);
         }
-        Debug.Log(alreadyInRange);
     }
     public void GetInRangeFrom(Vector3 destination, float range)
     {
         GetInRangeFrom(destination, range, out bool dummy);
+    }
+
+    public void RotateTowards(Transform targetTransform, float interpolation=1)
+    {
+        // Bugged. Fix later.
+        // Quaternion fullRotation = Quaternion.FromToRotation(transform.forward, targetTransform.position - transform.position);
+        // transform.rotation = Quaternion.Lerp(transform.rotation, fullRotation, interpolation);
+
+        // This will do for now
+        transform.LookAt(targetTransform);
     }
 
     private void UpdateAnimator()

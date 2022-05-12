@@ -14,7 +14,7 @@ namespace RPG.Combat
         float remainingDelay = 0;
         Movement movement;
         Animator animator;
-        [SerializeField] Target target;
+        [SerializeField] Health target;
 
 
         void Awake()
@@ -25,30 +25,34 @@ namespace RPG.Combat
 
         void Update()
         {
-            if (target != null)
+            if (target == null)
+                return;
+
+            bool inRange;
+            movement.GetInRangeFrom(target.transform.position, attackRange, out inRange);
+            remainingDelay -= Time.deltaTime;
+            if (inRange)
             {
-                bool inRange;
-                movement.GetInRangeFrom(target.transform.position, attackRange, out inRange);
-                Debug.Log(inRange);
-                remainingDelay -= Time.deltaTime;
-                if (inRange)
+                movement.RotateTowards(target.transform, 1);
+                if (remainingDelay <= 0)
                 {
-                    if (remainingDelay <= 0)
-                    {
-                        remainingDelay = attackDelay;
-                        animator.SetTrigger("Attack");
-                    }
+                    remainingDelay = attackDelay;
+                    animator.SetTrigger("Attack");
                 }
             }
         }
-        public void Attack(Target newTarget)
+        public void Attack(Health newTarget)
         {
+            if (newTarget.IsDead)
+                return;
+
             target = newTarget;
         }
 
         public void CancelAttacking()
         {
             target = null;
+            animator.SetTrigger("CancelAttack");
         }
 
         void Hit() // Animation event
@@ -56,10 +60,10 @@ namespace RPG.Combat
             if (target == null)
                 return;
 
-            Health targetHealth = target.GetComponent<Health>();
-            if (targetHealth != null)
+            target.TakeDamage(attackPower);
+            if (target.IsDead)
             {
-                targetHealth.TakeDamage(attackPower);
+                target = null;
             }
         }
     }
