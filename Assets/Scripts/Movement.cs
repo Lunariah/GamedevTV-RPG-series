@@ -22,8 +22,16 @@ public class Movement : MonoBehaviour
 
     public void MoveTo(Vector3 destination)
     {
-        navMeshAgent.isStopped = false;
+        if (navMeshAgent.enabled == false) return;
+
         navMeshAgent.destination = destination;
+    }
+
+    public void StayPut()
+    {
+        if (navMeshAgent.enabled == false) return;
+        
+        navMeshAgent.ResetPath();
     }
 
     public void GetInRangeFrom(Vector3 destination, float range, out bool alreadyInRange)
@@ -31,7 +39,7 @@ public class Movement : MonoBehaviour
         if ((destination - transform.position).magnitude < range + 0.1f) // 0.1 margin to dodge NavMeshAgent’s lack of precision
         {
             alreadyInRange = true;
-            navMeshAgent.isStopped = true;
+            StayPut();
         }
         else
         {
@@ -52,6 +60,11 @@ public class Movement : MonoBehaviour
 
         // This will do for now
         transform.LookAt(targetTransform);
+    }
+
+    public bool IsStopped()
+    {
+        return (navMeshAgent.isStopped || navMeshAgent.remainingDistance == 0);
     }
 
     private void UpdateAnimator()
