@@ -12,6 +12,11 @@ namespace RPG.Core
         [SerializeField] Vector3 guardPosition;
         [SerializeField] float chaseDistance = 0f;
         [SerializeField] float suspiciousPhaseTime = 3f;
+        [SerializeField] PatrolRoute patrol;
+        [SerializeField] float patrolPauseDuration = 0f;
+
+        private Waypoint currentWaypoint;
+        private float patrolPauseTimer;
 
         private Fighter fighter;
         private Movement movement;
@@ -48,6 +53,7 @@ namespace RPG.Core
             {
                 timeSinceLastSawPlayer = 0f;
                 fighter.Attack(playerHealth);
+                currentWaypoint = null;
             }
             else if (timeSinceLastSawPlayer < suspiciousPhaseTime)
             {
@@ -55,12 +61,31 @@ namespace RPG.Core
             }
             else
             {
-                movement.MoveTo(guardPosition);
+                Patrol();
             }
 
             // Deprecated
             // if (guardPosition != null && movement.IsStopped())
             //     movement.MoveTo(guardPosition);
+        }
+
+        private void Patrol()
+        {
+            if (currentWaypoint == null)
+            {
+                currentWaypoint = patrol.GetClosestWaypointFrom(transform.position);
+                movement.MoveTo(currentWaypoint.position);
+            }
+            else if (movement.IsStopped())
+            {
+                patrolPauseTimer += Time.deltaTime;
+                if (patrolPauseTimer >= patrolPauseDuration)
+                {
+                    patrolPauseTimer = 0;
+                    currentWaypoint = patrol.GetWaypointAfter(currentWaypoint);
+                    movement.MoveTo(currentWaypoint.position);
+                }
+            }
         }
 
         private bool FindPlayer()
@@ -86,6 +111,12 @@ namespace RPG.Core
         {
             Gizmos.color = Color.blue;
             Gizmos.DrawWireSphere(transform.position, chaseDistance);
+        }
+
+        void OnDrawGizmosSelected()
+        {
+            if (patrol != null)
+                patrol.DisplayGizmos();
         }
     }
 }
