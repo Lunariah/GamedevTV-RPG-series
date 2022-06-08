@@ -7,6 +7,8 @@ using UnityEngine.AI;
 public class Movement : MonoBehaviour
 {
     [SerializeField] Animator animator;
+    [SerializeField] float speed = 3f;
+    [SerializeField] float walkSpeedMultiplier = 0.7f;
     private NavMeshAgent navMeshAgent;
 
 
@@ -20,11 +22,17 @@ public class Movement : MonoBehaviour
         UpdateAnimator();
     }
 
-    public void MoveTo(Vector3 destination)
+    public void MoveTo(Vector3 destination, float speedMultiplier=1f)
     {
         if (navMeshAgent.enabled == false) return;
 
         navMeshAgent.destination = destination;
+        navMeshAgent.speed = speed * speedMultiplier;
+    }
+    
+    public void WalkTo(Vector3 destination)
+    {
+         MoveTo(destination, walkSpeedMultiplier);
     }
 
     public void StayPut()

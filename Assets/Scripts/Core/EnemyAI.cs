@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using RPG.Combat;
 using UnityEngine.AI;
+//using UnityEngine.Mathf;
 
 namespace RPG.Core
 {
@@ -23,7 +24,7 @@ namespace RPG.Core
         private Health health;
         private Health playerHealth;
 
-        private float timeSinceLastSawPlayer = 0f;
+        private float timeSinceLastSawPlayer = Mathf.Infinity;
 
         void Awake()
         {
@@ -74,7 +75,7 @@ namespace RPG.Core
             if (currentWaypoint == null)
             {
                 currentWaypoint = patrol.GetClosestWaypointFrom(transform.position);
-                movement.MoveTo(currentWaypoint.position);
+                movement.WalkTo(currentWaypoint.position);
             }
             else if (movement.IsStopped())
             {
@@ -83,7 +84,7 @@ namespace RPG.Core
                 {
                     patrolPauseTimer = 0;
                     currentWaypoint = patrol.GetWaypointAfter(currentWaypoint);
-                    movement.MoveTo(currentWaypoint.position);
+                    movement.WalkTo(currentWaypoint.position);
                 }
             }
         }
