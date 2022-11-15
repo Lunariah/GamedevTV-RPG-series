@@ -10,13 +10,25 @@ namespace RPG.Core
     [SelectionBase]
     public class PlayerInput : MonoBehaviour
     {
+        private Mode controlMode;
         private Movement movement; 
         private Fighter fighter;
         private Health health;
         new private Camera camera;
+
+        public enum Mode
+        {
+            Combat,
+            Dialogue,
+            Cutscene,
+            Menu
+        }
         
         void Awake()
         {
+            controlMode = Mode.Combat; // Temporary
+
+
             movement = GetComponent<Movement>();
             fighter = GetComponent<Fighter>();
             health = GetComponent<Health>();
@@ -35,9 +47,16 @@ namespace RPG.Core
 
         void Update()
         {
-            if (Input.GetMouseButton(0))
+            switch (controlMode)
             {
-                RaycastClick();
+                case Mode.Combat:
+                    if (Input.GetMouseButton(0))
+                    {
+                        RaycastClick();
+                    }
+                    break;
+                default:
+                    break;
             }
         }
 
@@ -68,6 +87,8 @@ namespace RPG.Core
                 movement.MoveTo(walkableHit.point);
             }
         }
+
+
     }
 }
 
