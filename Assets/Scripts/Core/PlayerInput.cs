@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Playables;
 using RPG.Combat;
 
 namespace RPG.Core
@@ -10,23 +11,34 @@ namespace RPG.Core
     [SelectionBase]
     public class PlayerInput : MonoBehaviour
     {
-        private Mode controlMode;
+        private GameMode controlMode;
         private Movement movement; 
         private Fighter fighter;
         private Health health;
         new private Camera camera;
 
-        public enum Mode
+        public enum GameMode
         {
             Combat,
             Dialogue,
-            Cutscene,
+            Cinematic,
             Menu
+        }
+
+        public void EnterCinematic(PlayableDirector director/*, GameMode exitMode=GameMode.Combat */)
+        {
+            controlMode = GameMode.Cinematic;
+            director.stopped += ExitCinematic;
+        }
+
+        void ExitCinematic(PlayableDirector dummy /*, GameMode exitMode*/)
+        {
+            controlMode = GameMode.Combat;
         }
         
         void Awake()
         {
-            controlMode = Mode.Combat; // Temporary
+            controlMode = GameMode.Combat; // Temporary
 
 
             movement = GetComponent<Movement>();
@@ -49,7 +61,7 @@ namespace RPG.Core
         {
             switch (controlMode)
             {
-                case Mode.Combat:
+                case GameMode.Combat:
                     if (Input.GetMouseButton(0))
                     {
                         RaycastClick();
