@@ -6,7 +6,8 @@ using RPG.Core;
 
 namespace RPG.Cinematics
 {
-    [RequireComponent(typeof(BoxCollider))]
+    [RequireComponent(typeof(Collider))]
+    [RequireComponent(typeof(PlayableDirector))]
     public class CinematicTrigger : MonoBehaviour
     {
         bool alreadyTriggered = false;
@@ -15,14 +16,15 @@ namespace RPG.Cinematics
         {
             if (alreadyTriggered) return;
 
-            PlayerInput input = GetComponent<PlayerInput>();
+            PlayerInput input = other.GetComponent<PlayerInput>();
             if (input == null) return;
             
             PlayableDirector director = GetComponent<PlayableDirector>();
             if (director == null) return;
 
             input.EnterCinematic(director);
-
+            
+            alreadyTriggered = true;
         }      
     }
 }

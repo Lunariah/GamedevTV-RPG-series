@@ -16,7 +16,6 @@ public class ColliderGizmo : MonoBehaviour
 
     void OnValidate()
     {
-        Debug.Log("OnValidate");
         collider = GetComponent<Collider>();
         colliderType = collider.GetType();
     }

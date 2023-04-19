@@ -25,10 +25,15 @@ namespace RPG.Core
             Menu
         }
 
-        public void EnterCinematic(PlayableDirector director/*, GameMode exitMode=GameMode.Combat */)
+        public void EnterCinematic(PlayableDirector director, bool cancelMovement=true/*, GameMode exitMode=GameMode.Combat */) 
+        // Todo: Wire in states to avoid cinematics overlapping
         {
             controlMode = GameMode.Cinematic;
+            fighter.CancelAttacking();
+            if (cancelMovement) movement.StayPut();
+            
             director.stopped += ExitCinematic;
+            director.Play();
         }
 
         void ExitCinematic(PlayableDirector dummy /*, GameMode exitMode*/)
