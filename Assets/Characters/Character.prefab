@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 6879459033852103444}
   - component: {fileID: 6879459033842771850}
   - component: {fileID: 6879459033852347744}
-  - component: {fileID: 6879459033852347746}
   - component: {fileID: 8855168500477653272}
+  - component: {fileID: 6879459033852347746}
   m_Layer: 7
   m_Name: Character
   m_TagString: Untagged
@@ -75,19 +75,6 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!114 &6879459033852347746
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6879459033852347756}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e7fd4a65e2143c4468618a2e49ac617d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  animator: {fileID: 6879459033842771850}
 --- !u!136 &8855168500477653272
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -102,3 +89,18 @@ CapsuleCollider:
   m_Height: 2.0150099
   m_Direction: 1
   m_Center: {x: 0, y: 0.9934826, z: 0}
+--- !u!114 &6879459033852347746
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6879459033852347756}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7fd4a65e2143c4468618a2e49ac617d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 6879459033842771850}
+  speed: 3
+  walkSpeedMultiplier: 0.7
